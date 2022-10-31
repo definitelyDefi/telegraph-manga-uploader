@@ -9,6 +9,10 @@ telegraph.create_account(short_name='definitelydefi')
 html_content = ""
 title = input('Type title of article: ')
 
+
+if not os.path.exists(directory):
+    os.makedirs(directory)
+
 for filename in os.listdir(directory):
     file = os.path.join(directory, filename)
     if os.path.isfile(file):

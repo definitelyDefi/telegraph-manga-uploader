@@ -1,4 +1,6 @@
+
 from telegraph import Telegraph
+
 import requests
 import os
 
@@ -15,13 +17,22 @@ if not os.path.exists(directory):
 
 for filename in os.listdir(directory):
     file = os.path.join(directory, filename)
+    
     if os.path.isfile(file):
-        print(f'[~] Proccesing {os.path.basename(file)}')
         with open(file, 'rb') as f:
-            path = requests.post('https://telegra.ph/upload', files={'file': ('file', f,'image/jpeg')}).json()[0]['src']
-        
-        html_content += f'<img src="{path}">'
-        os.remove(file)
+
+            print(f'[~] Proccesing {os.path.basename(file)}')
+            json_data = requests.post('https://telegra.ph/upload', files={'file': ('file', f,'image/jpeg')}).json()[0]['src']
+            html_content += f'<img src="{json_data}">'
+            f.close()
+
+for filename in os.listdir(directory):
+    file = os.path.join(directory, filename)
+    os.remove(file)
+
+print('[-] Files deleted')
+    
+
 
 response = telegraph.create_page(
     title,
@@ -30,4 +41,4 @@ response = telegraph.create_page(
 
 
 
-print('[+] http://telegra.ph/{}'.format(response['path']))
+print('[+] Link: http://telegra.ph/{}'.format(response['path']))
